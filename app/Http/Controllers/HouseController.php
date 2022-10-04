@@ -7,79 +7,79 @@ use Illuminate\Http\Request;
 
 class HouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return view('houses.index', [
+            'houses' => House::all()->sortByDesc('created_at')
+        ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('houses.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+           'name' => ['string', 'min:3', 'max:250', 'required'],
+           'pricePerNight' => ['integer', 'min:1', 'required'],
+           'numberOfRooms' => ['integer', 'min:1', 'required'],
+           'user_id' => ['integer', 'exists:user,id', 'required']
+        ]);
+        $house = House::create($data);
+        if(!$house){
+            return redirect()->back()->withErrors([
+                'error' => 'Unable to create house'
+            ]);
+        }
+        else{
+            return redirect()->back()->with([
+                'status' => 'success'
+            ]);
+        }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\House  $house
-     * @return \Illuminate\Http\Response
-     */
     public function show(House $house)
     {
-        //
+        return view('houses.show', [
+            'house' => $house
+        ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\House  $house
-     * @return \Illuminate\Http\Response
-     */
     public function edit(House $house)
     {
-        //
+        return view('houses.edit', [
+            'house' => $house
+        ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\House  $house
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, House $house)
     {
-        //
+        $data = $request->validate([
+            'name' => ['string', 'min:3', 'max:250', 'required'],
+            'pricePerNight' => ['integer', 'min:1', 'required'],
+            'numberOfRooms' => ['integer', 'min:1', 'required'],
+            'user_id' => ['integer', 'exists:user,id', 'required']
+        ]);
+        $house = House::update($data);
+        if(!$house){
+            return redirect()->back()->withErrors([
+                'error' => 'Unable to update house'
+            ]);
+        }
+        else{
+            return redirect()->back()->with([
+                'status' => 'success'
+            ]);
+        }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\House  $house
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(House $house)
     {
-        //
+        if(!$house->delete()){
+            return redirect()->back()->withErrors([
+                'error' => 'Unable to delete house'
+            ]);
+        }
+        else{
+            return redirect()->back()->with([
+                'status' => 'success'
+            ]);
+        }
     }
 }

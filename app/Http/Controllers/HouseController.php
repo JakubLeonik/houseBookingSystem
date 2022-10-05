@@ -15,16 +15,18 @@ class HouseController extends Controller
     }
     public function create()
     {
+        $this->middleware('auth');
         return view('houses.create');
     }
     public function store(Request $request)
     {
+        $this->middleware('auth');
         $data = $request->validate([
            'name' => ['string', 'min:3', 'max:250', 'required'],
            'pricePerNight' => ['integer', 'min:1', 'required'],
-           'numberOfRooms' => ['integer', 'min:1', 'required'],
-           'user_id' => ['integer', 'exists:user,id', 'required']
+           'numberOfRooms' => ['integer', 'min:1', 'required']
         ]);
+        $data['user_id'] = auth()->user()->id;
         $house = House::create($data);
         if(!$house){
             return redirect()->back()->withErrors([
@@ -54,11 +56,9 @@ class HouseController extends Controller
         $data = $request->validate([
             'name' => ['string', 'min:3', 'max:250', 'required'],
             'pricePerNight' => ['integer', 'min:1', 'required'],
-            'numberOfRooms' => ['integer', 'min:1', 'required'],
-            'user_id' => ['integer', 'exists:user,id', 'required']
+            'numberOfRooms' => ['integer', 'min:1', 'required']
         ]);
-        $house = House::update($data);
-        if(!$house){
+        if(!$house->update($data)){
             return redirect()->back()->withErrors([
                 'error' => 'Unable to update house'
             ]);
@@ -77,7 +77,7 @@ class HouseController extends Controller
             ]);
         }
         else{
-            return redirect()->back()->with([
+            return redirect()->route('index')->with([
                 'status' => 'success'
             ]);
         }

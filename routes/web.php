@@ -1,24 +1,21 @@
 <?php
 
 use App\Http\Controllers\HouseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function () {
+    Route::controller(HouseController::class)->group(function () {
+        Route::get('houses/{house}/edit', 'edit')->name('houses.edit');
+        Route::post('houses', 'store')->name('houses.store');
+        Route::post('houses/{house}', 'update')->name('houses.update');
+        Route::delete('houses/{house}', 'destroy')->name('houses.delete');
+    });
 });
-
-Route::resource('houses', HouseController::class);
+Route::controller(HouseController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('houses/{house}', 'show')->name('houses.show');
+});
 
 Auth::routes();
 

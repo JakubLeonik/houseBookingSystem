@@ -12,7 +12,7 @@ class Booking extends Model
     protected $guarded = [];
 
     public function house(){
-        return $this->belongsTo(House::class);
+        return $this->belongsTo(House::class, 'house_id');
     }
     public function user(){
         return $this->belongsTo(User::class);

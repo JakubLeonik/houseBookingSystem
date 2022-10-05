@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Booking;
 use App\Models\House;
+use App\Policies\BookingPolicy;
 use App\Policies\HousePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -15,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        House::class => HousePolicy::class
+        House::class => HousePolicy::class,
+        Booking::class => BookingPolicy::class
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 

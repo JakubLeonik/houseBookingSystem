@@ -8,12 +8,12 @@
                 From: {{ $booking->dateFrom }} to {{ $booking->dateTo }} <br>
                 By {{ $booking->user->name }}
             </div>
-{{--            @can('update', $house)--}}
-{{--                <a class="d-flex justify-content-center text-dark"--}}
-{{--                   href="{{ route('houses.edit', ['house' => $house->id]) }}">--}}
-{{--                    Edit--}}
-{{--                </a>--}}
-{{--            @endcan--}}
+            @can('update', $booking)
+                <a class="d-flex justify-content-center text-dark"
+                   href="{{ route('bookings.edit', ['booking' => $booking->id]) }}">
+                    Edit
+                </a>
+            @endcan
             <a class="d-flex justify-content-center text-dark"
                href="{{ route('bookings.index') }}">
                 Go back

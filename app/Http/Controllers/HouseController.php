@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\House;
 use Illuminate\Http\Request;
 
@@ -15,11 +16,12 @@ class HouseController extends Controller
     }
     public function create()
     {
-        $this->middleware('auth');
+        $this->authorize('create', House::class);
         return view('houses.create');
     }
     public function store(Request $request)
     {
+        $this->authorize('create', House::class);
         $data = $request->validate([
             'image' => ['image', 'max:2048', 'mimes:jpeg,png,jpg,gif', 'required'],
             'name' => ['string', 'min:3', 'max:250', 'required'],
@@ -47,18 +49,21 @@ class HouseController extends Controller
     }
     public function show(House $house)
     {
+        $this->authorize('view', $house);
         return view('houses.show', [
             'house' => $house
         ]);
     }
     public function edit(House $house)
     {
+        $this->authorize('update', $house);
         return view('houses.edit', [
             'house' => $house
         ]);
     }
     public function update(Request $request, House $house)
     {
+        $this->authorize('update', $house);
         $data = $request->validate([
             'image' => ['image', 'max:2048', 'mimes:jpeg,png,jpg,gif', 'required'],
             'name' => ['string', 'min:3', 'max:250', 'required'],
@@ -83,12 +88,15 @@ class HouseController extends Controller
     }
     public function destroy(House $house)
     {
+        $this->authorize('delete', $house);
+        $id = $house->id;
         if(!$house->delete()){
             return redirect()->back()->withErrors([
                 'error' => 'Unable to delete house'
             ]);
         }
         else{
+            Booking::where('house_id', $id)->delete();
             return redirect()->route('index')->with([
                 'status' => 'success'
             ]);

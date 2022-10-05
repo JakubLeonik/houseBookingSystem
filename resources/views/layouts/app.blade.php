@@ -55,6 +55,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('index') }}">
+                                        Main page
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('houses.create') }}">
                                         Add house
                                     </a>

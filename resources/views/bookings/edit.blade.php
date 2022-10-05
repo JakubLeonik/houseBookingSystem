@@ -9,18 +9,18 @@
                 submit-text="Edit booking"
                 :fields="[
                 ['type' => 'date', 'name' => 'dateFrom', 'value' => old('dateFrom', $booking->dateFrom)],
-                ['type' => 'date', 'name' => 'dateFrom', 'value' => old('dateTo', $booking->dateTo)],
+                ['type' => 'date', 'name' => 'dateTo', 'value' => old('dateTo', $booking->dateTo)],
                 ['type' => 'hidden', 'name' => 'house_id', 'value' => $house->id],
             ]"></x-form>
-{{--            @can('delete', $house)--}}
-{{--                <x-form--}}
-{{--                    method="POST"--}}
-{{--                    action="{{ route('houses.delete', ['house' => $house->id]) }}"--}}
-{{--                    submit-text="Delete house"--}}
-{{--                >--}}
-{{--                    @method('DELETE')--}}
-{{--                </x-form>--}}
-{{--            @endcan--}}
+            @can('delete', $booking)
+                <x-form
+                    method="POST"
+                    action="{{ route('bookings.delete', ['booking' => $booking->id]) }}"
+                    submit-text="Delete booking"
+                >
+                    @method('DELETE')
+                </x-form>
+            @endcan
             <a class="d-flex justify-content-center text-dark"
                href="{{ route('bookings.show', ['booking' => $booking->id]) }}">
                 Go back

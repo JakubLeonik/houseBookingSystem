@@ -6,11 +6,13 @@
             <x-form
                 method="POST"
                 action="{{ route('houses.store') }}"
+                enctype="multipart/form-data"
                 submit-text="Add house"
                 :fields="[
                 ['type' => 'text', 'name' => 'name'],
                 ['type' => 'number', 'name' => 'pricePerNight'],
                 ['type' => 'number', 'name' => 'numberOfRooms'],
+                ['type' => 'file', 'name' => 'image'],
             ]"></x-form>
             <x-validation-errors :errors="$errors" />
         </div>

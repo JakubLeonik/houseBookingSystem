@@ -22,10 +22,17 @@ class HouseController extends Controller
     {
         $this->middleware('auth');
         $data = $request->validate([
-           'name' => ['string', 'min:3', 'max:250', 'required'],
-           'pricePerNight' => ['integer', 'min:1', 'required'],
-           'numberOfRooms' => ['integer', 'min:1', 'required']
+            'image' => ['image', 'max:2048', 'mimes:jpeg,png,jpg,gif', 'required'],
+            'name' => ['string', 'min:3', 'max:250', 'required'],
+            'pricePerNight' => ['integer', 'min:1', 'required'],
+            'numberOfRooms' => ['integer', 'min:1', 'required']
         ]);
+
+        $imageName = time().'.'.$data['image']->extension();
+        $request->file('image')->storeAs('public/houses', $imageName);
+        unset($data['image']);
+        $data['imagePath'] = '/storage/houses/'.$imageName;
+
         $data['user_id'] = auth()->user()->id;
         $house = House::create($data);
         if(!$house){
@@ -34,7 +41,7 @@ class HouseController extends Controller
             ]);
         }
         else{
-            return redirect()->back()->with([
+            return redirect()->route('index')->with([
                 'status' => 'success'
             ]);
         }
@@ -64,7 +71,7 @@ class HouseController extends Controller
             ]);
         }
         else{
-            return redirect()->back()->with([
+            return redirect()->route('index')->with([
                 'status' => 'success'
             ]);
         }

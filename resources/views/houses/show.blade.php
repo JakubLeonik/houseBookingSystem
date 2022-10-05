@@ -9,6 +9,12 @@
                 </h2>
                 {{ $house->pricePerNight }}$ / {{ $house->numberOfRooms }} rooms
             </div>
+            @can('update', $house)
+                <a class="d-flex justify-content-center text-dark"
+                   href="{{ route('houses.edit', ['house' => $house->id]) }}">
+                    Edit
+                </a>
+            @endcan
             <a class="d-flex justify-content-center text-dark"
                href="{{ route('index') }}">
                 Go back

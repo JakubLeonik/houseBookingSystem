@@ -22,6 +22,7 @@ class HouseFactory extends Factory
             'pricePerNight' => $this->faker->randomNumber()*10,
             'numberOfRooms' => $this->faker->randomNumber()+1,
             'user_id' => User::all()->random(1)->first(),
+            'imagePath' => '/storage/houses/obraz.jpg',
         ];
     }
 }

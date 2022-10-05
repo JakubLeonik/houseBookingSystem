@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::controller(HouseController::class)->group(function () {
+        Route::get('houses/create', 'create')->name('houses.create');
         Route::get('houses/{house}/edit', 'edit')->name('houses.edit');
         Route::post('houses', 'store')->name('houses.store');
         Route::post('houses/{house}', 'update')->name('houses.update');
@@ -18,5 +19,3 @@ Route::controller(HouseController::class)->group(function () {
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

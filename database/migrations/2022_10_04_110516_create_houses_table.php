@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('pricePerNight');
             $table->integer('numberOfRooms');
+            $table->string('imagePath');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

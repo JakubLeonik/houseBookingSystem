@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
              'name' => 'Admin',
              'email' => 'admin@admin.com',
+             'role' => 'admin',
          ]);
         House::factory(15)->create();
         Booking::factory(30)->create();

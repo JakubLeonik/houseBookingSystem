@@ -20,7 +20,6 @@ class HouseController extends Controller
     }
     public function store(Request $request)
     {
-        $this->middleware('auth');
         $data = $request->validate([
             'image' => ['image', 'max:2048', 'mimes:jpeg,png,jpg,gif', 'required'],
             'name' => ['string', 'min:3', 'max:250', 'required'],
@@ -61,10 +60,16 @@ class HouseController extends Controller
     public function update(Request $request, House $house)
     {
         $data = $request->validate([
+            'image' => ['image', 'max:2048', 'mimes:jpeg,png,jpg,gif', 'required'],
             'name' => ['string', 'min:3', 'max:250', 'required'],
             'pricePerNight' => ['integer', 'min:1', 'required'],
             'numberOfRooms' => ['integer', 'min:1', 'required']
         ]);
+
+        $imageNameArray = explode('/', $house->imagePath);
+        $request->file('image')->storeAs('public/houses', end($imageNameArray));
+        unset($data['image']);
+
         if(!$house->update($data)){
             return redirect()->back()->withErrors([
                 'error' => 'Unable to update house'

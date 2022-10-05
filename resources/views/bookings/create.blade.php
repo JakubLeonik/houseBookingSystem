@@ -5,14 +5,13 @@
         <div class="row mt-3 justify-content-center">
             <x-form
                 method="POST"
-                action="{{ route('houses.store') }}"
+                action="{{ route('bookings.store') }}"
                 enctype="multipart/form-data"
-                submit-text="Add house"
+                submit-text="Add booking"
                 :fields="[
-                ['type' => 'text', 'name' => 'name'],
-                ['type' => 'number', 'name' => 'pricePerNight'],
-                ['type' => 'number', 'name' => 'numberOfRooms'],
-                ['type' => 'file', 'name' => 'image'],
+                ['type' => 'date', 'name' => 'dateFrom'],
+                ['type' => 'date', 'name' => 'dateTo'],
+                ['type' => 'hidden', 'name' => 'house_id', 'value' => $house->id],
             ]"></x-form>
             <x-validation-errors :errors="$errors" />
         </div>

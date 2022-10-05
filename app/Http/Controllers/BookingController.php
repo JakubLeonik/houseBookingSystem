@@ -11,22 +11,23 @@ class BookingController extends Controller
     public function index()
     {
         return view('bookings.index', [
-            'bookings' => Booking::all()->sortByDesc('dateFrom')
+            'bookings' => Booking::all()->sortByDesc('id')
         ]);
     }
 
-    public function create()
+    public function create(House $house)
     {
-        return view('bookings.create');
+        return view('bookings.create', [
+            'house' => $house
+        ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'house_id' => ['integer', 'exists:houses,id', 'required'],
-            'dateFrom' => ['date', 'after:today', 'date_format:Y/m/d', 'required'],
-            'dateTo' => ['date', 'after:dateFrom', 'date_format:Y/m/d', 'required'],
-            'user_id' => ['integer', 'exists:users,id', 'required']
+            'dateFrom' => ['date', 'after:today', 'required'],
+            'dateTo' => ['date', 'after:dateFrom', 'required'],
         ]);
 
         $data['user_id'] = auth()->user()->id;
@@ -61,10 +62,14 @@ class BookingController extends Controller
     {
         $data = $request->validate([
             'house_id' => ['integer', 'exists:houses,id', 'required'],
-            'dateFrom' => ['date', 'after:today', 'date_format:Y/m/d', 'required'],
-            'dateTo' => ['date', 'after:dateFrom', 'date_format:Y/m/d', 'required'],
+            'dateFrom' => ['date', 'after:today', 'required'],
+            'dateTo' => ['date', 'after:dateFrom', 'required'],
             'user_id' => ['integer', 'exists:users,id', 'required']
         ]);
+
+        $data['dateFrom'] = date_format($data['dateFrom'], 'Y/m/d');
+        $data['dateTo'] = date_format($data['dateTo'], 'Y/m/d');
+
         if(!$booking->update($data)){
             return redirect()->back()->withErrors([
                 'error' => 'Unable to update booking'

@@ -37,8 +37,18 @@ class BookingController extends Controller
             'dateFrom' => ['date', 'after:today', 'required'],
             'dateTo' => ['date', 'after:dateFrom', 'required'],
         ]);
-
         $data['user_id'] = auth()->user()->id;
+
+        $isDateOk = true;
+        foreach(Booking::all() as $booking){
+            if($booking->dateFrom <= $data['dateTo'] && $data['dateFrom'] <= $booking->dateTo)
+                $isDateOk = false;
+        }
+        if(!$isDateOk){
+            return redirect()->back()->withErrors([
+                'error' => 'Date is already reserved'
+            ]);
+        }
 
         if(!Booking::create($data)){
             return redirect()->back()->withErrors([

@@ -16,10 +16,12 @@
                     Edit
                 </a>
             @endcan
-            <a class="d-flex justify-content-center text-dark"
-               href="{{ route('bookings.create', ['house' => $house->id]) }}">
-                Add booking
-            </a>
+            @can('create', \App\Models\Booking::class)
+                <a class="d-flex justify-content-center text-dark"
+                   href="{{ route('bookings.create', ['house' => $house->id]) }}">
+                    Add booking
+                </a>
+            @endcan
             <a class="d-flex justify-content-center text-dark"
                href="{{ route('index') }}">
                 Go back
